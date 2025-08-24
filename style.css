@@ -228,7 +228,6 @@ body {
 .fc-daygrid-day:hover {
     transform: translateY(-3px); /* Lift effect */
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12), 0 0 50px rgba(0, 255, 255, 0.8); /* Neon blue glow */
-    background-color: #f9f9fb; /* Slight hover effect */
 }
 
 /* Modal Styles */
@@ -312,4 +311,98 @@ body {
     border: 1px solid #d1d1d6; /* Softer border */
     font-size: 1.1em;
     box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.06); /* Subtle inner shadow */
+}
+
+@media (max-width: 768px) {
+    .container {
+        width: 95%;
+        padding: 15px;
+    }
+
+    .fc-toolbar-title {
+        font-size: 1.5em;
+    }
+
+    .fc-button {
+        padding: 8px 12px;
+        font-size: 0.9em;
+    }
+
+    .fc-col-header-cell-cushion,
+    .fc-daygrid-day-number {
+        font-size: 0.8em;
+        padding: 5px;
+    }
+
+    .fc-event-title {
+        font-size: 0.7em;
+    }
+
+    .day-status {
+        font-size: 0.65em;
+        bottom: 2px;
+    }
+
+    .modal-content {
+        width: 90%;
+        padding: 20px;
+    }
+
+    .modal-content button {
+        padding: 10px 15px;
+        font-size: 0.9em;
+    }
+
+    .modal-content input[type="text"] {
+        padding: 10px;
+        font-size: 1em;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        width: 100%;
+        border-radius: 0;
+        box-shadow: none;
+        padding: 10px;
+    }
+
+    .fc-toolbar-title {
+        font-size: 1.2em;
+    }
+
+    .fc-button {
+        padding: 6px 10px;
+        font-size: 0.8em;
+    }
+
+    .fc-col-header-cell-cushion,
+    .fc-daygrid-day-number {
+        font-size: 0.7em;
+        padding: 3px;
+    }
+
+    .fc-event-title {
+        font-size: 0.6em;
+    }
+
+    .day-status {
+        font-size: 0.6em;
+        bottom: 1px;
+    }
+
+    .modal-content {
+        width: 95%;
+        padding: 15px;
+    }
+
+    .modal-content button {
+        padding: 8px 12px;
+        font-size: 0.8em;
+    }
+
+    .modal-content input[type="text"] {
+        padding: 8px;
+        font-size: 0.9em;
+    }
 }
