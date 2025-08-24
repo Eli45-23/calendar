@@ -383,12 +383,16 @@ body {
     }
 
     .fc-event-title {
-        font-size: 0.6em;
+        font-size: 0.55em; /* Further reduced font size */
+    }
+
+    .fc-event {
+        padding: 2px 3px; /* Reduced padding */
     }
 
     .day-status {
-        font-size: 0.6em;
-        bottom: 1px;
+        font-size: 0.55em; /* Further reduced font size */
+        bottom: 0px; /* Adjusted position */
     }
 
     .modal-content {
