@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payday Calendar</title>
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div id="calendar"></div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
+
+<div id="eventModal" class="modal">
+    <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <h2>Manage Day Status</h2>
+        <p id="modalDate"></p>
+        <input type="text" id="statusInput" placeholder="e.g., 8hrs, 4hrs OT, None">
+        <button id="saveStatusBtn">Save</button>
+        <button id="deleteStatusBtn">Delete</button>
+        <button id="cancelBtn">Cancel</button>
+    </div>
+</div>

@@ -1,0 +1,315 @@
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #c0c0c0, #e0e0e0, #c0c0c0); /* More contrasting gradient */
+    background-size: 600% 600%; /* Make gradient larger than viewport */
+    animation: backgroundFlow 10s ease infinite; /* Faster animation */
+    color: #1c1c1e; /* Dark gray, similar to iOS text */
+}
+
+@keyframes backgroundFlow {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.flying-object {
+    position: absolute;
+    background-color: rgba(150, 150, 150, 0.2); /* Subtle gray, more transparent */
+    z-index: 0; /* Behind the calendar */
+    animation: flyAround linear infinite; /* Animation for flying, duration set by JS */
+    opacity: 0; /* Start invisible */
+}
+
+@keyframes flyAround {
+    0% {
+        transform: translate(0, 0) scale(0.5);
+        opacity: 0;
+    }
+    25% {
+        transform: translate(20vw, 10vh) scale(1);
+        opacity: 0.6;
+    }
+    50% {
+        transform: translate(40vw, -10vh) scale(1.2);
+        opacity: 0.8;
+    }
+    75% {
+        transform: translate(60vw, 20vh) scale(0.8);
+        opacity: 0.6;
+    }
+    100% {
+        transform: translate(80vw, 0) scale(0.5);
+        opacity: 0;
+    }
+}
+
+.container {
+    width: 80%;
+    max-width: 1100px;
+    position: relative;
+    background-color: #ffffff;
+    border-radius: 16px; /* More rounded corners */
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07), 
+                0 2px 4px rgba(0, 0, 0, 0.07), 
+                0 4px 8px rgba(0, 0, 0, 0.07), 
+                0 8px 16px rgba(0, 0, 0, 0.07), 
+                0 32px 64px rgba(0, 0, 0, 0.07); /* Multiple shadows for depth */
+    padding: 25px;
+    transform: translateY(-10px); /* Lift the calendar */
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.fc-view-harness {
+    position: relative;
+    z-index: 1;
+}
+
+.pay-bracket {
+    position: absolute;
+    width: 8px; /* 8-12px wide */
+    background-color: rgba(54, 132, 207, 0.25);
+    border-radius: 4px; /* 4-8px rounded corners */
+    pointer-events: none;
+    z-index: 0; /* Behind day content */
+}
+
+.pay-label {
+    position: absolute;
+    font-size: 11px; /* 11-12px text */
+    font-weight: bold;
+    background-color: rgba(54, 132, 207, 0.1); /* Lighter tint */
+    border: 1px solid rgba(54, 132, 207, 0.2); /* Thin border */
+    border-radius: 4px;
+    padding: 2px 4px;
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 2; /* Above background, below events */
+}
+
+.pay-bracket-start .pay-label-start {
+    left: 10px; /* A few pixels to the right of the bracket */
+}
+
+.pay-bracket-end .pay-label-end {
+    right: 10px; /* A few pixels to the left of the bracket */
+}
+
+/* Custom styles for FullCalendar events to ensure text visibility */
+.fc-event-title {
+    white-space: normal !important; /* Allow text to wrap */
+    overflow: visible !important; /* Ensure overflow is visible */
+    font-weight: 500; /* Medium weight for event titles */
+    color: yellow !important;
+}
+
+.fc-event {
+    height: auto !important; /* Allow event height to adjust to content */
+    min-height: 20px; /* Ensure a minimum height for events */
+    border-radius: 6px; /* More rounded corners for events */
+    background-color: #007aff; /* Apple blue */
+    border: none; /* Remove default border */
+    padding: 3px 5px; /* More padding */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Subtle shadow for events */
+}
+
+.fc-daygrid-event-harness {
+    margin-bottom: 3px; /* More spacing between events */
+}
+
+/* Style for past days */
+.past-day {
+    background-color: #f9f9fb; /* Very light gray for past days */
+    color: #c7c7cc; /* Lighter gray for past text */
+    text-decoration: line-through;
+    text-decoration-color: #ff453a; /* Apple red */
+}
+
+/* Styles for worked/overtime/none days */
+.worked-day {
+    background-color: #34c759; /* Apple green */
+    color: white; /* White text for contrast */
+}
+
+.overtime-day {
+    background-color: #ff3b30; /* Apple red */
+    color: white; /* White text for contrast */
+}
+
+.none-day {
+    background-color: #f2f2f7; /* Match body background */
+    opacity: 0.8; /* Slightly faded */
+    color: #8e8e93; /* Light gray text */
+}
+
+.day-status {
+    font-size: 0.75em; /* Slightly larger font */
+    text-align: center;
+    color: #daa520; /* More readable yellow */
+    position: absolute; /* Position absolutely */
+    bottom: 5px; /* 5px from the bottom */
+    left: 50%; /* Center horizontally */
+    transform: translateX(-50%); /* Adjust for true true centering */
+    width: 100%; /* Take full width of parent */
+    display: flex; /* Use flexbox for internal alignment */
+    justify-content: center; /* Center content horizontally */
+    align-items: center; /* Center content vertically */
+    padding-right: 15px; /* Make space for the delete button */
+    font-weight: 500; /* Medium weight */
+}
+
+/* Make the day cell relative for absolute positioning of .day-status */
+.fc-daygrid-day {
+    position: relative;
+}
+
+/* FullCalendar specific modernizations */
+.fc-toolbar-title {
+    font-size: 2em; /* Larger title */
+    font-weight: 700; /* Bold title */
+    color: #1c1c1e; /* Dark gray */
+    transition: transform 0.2s ease-in-out, color 0.2s ease-in-out; /* Add transition for hover */
+}
+
+.fc-toolbar-title:hover {
+    transform: translateY(-3px); /* Lift effect */
+    color: #007aff; /* Change color on hover */
+}
+
+.fc-button {
+    background-color: #007aff; /* Apple blue button */
+    border: none;
+    border-radius: 8px; /* More rounded buttons */
+    padding: 10px 18px;
+    font-weight: 600; /* Semi-bold */
+    color: white;
+    transition: background-color 0.2s ease-in-out, transform 0.1s ease-out, box-shadow 0.1s ease-out; /* Add transform and box-shadow transition */
+}
+
+.fc-button:hover {
+    background-color: #005bb5;
+}
+
+.fc-button:active {
+    transform: scale(0.98); /* Slightly shrink on click */
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15); /* Smaller shadow on click */
+}
+
+.fc-col-header-cell-cushion {
+    color: #8e8e93; /* Light gray for header text */
+    font-weight: 600; /* Semi-bold */
+    padding-top: 10px; /* More padding */
+    padding-bottom: 10px;
+}
+
+.fc-daygrid-day-number {
+    font-weight: 600; /* Semi-bold */
+    color: #1c1c1e; /* Dark gray */
+    padding: 8px; /* More padding */
+}
+
+.fc-daygrid-day {
+    border-radius: 12px; /* More rounded corners for day cells */
+    overflow: hidden; /* Hide overflow for rounded corners */
+    background-color: #ffffff; /* White background for day cells */
+    border: 1px solid #e5e5ea; /* Subtle border */
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out, background-color 0.2s ease-in-out; /* Add transitions */
+}
+
+.fc-daygrid-day:hover {
+    transform: translateY(-3px); /* Lift effect */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12), 0 0 50px rgba(0, 255, 255, 0.8); /* Neon blue glow */
+    background-color: #f9f9fb; /* Slight hover effect */
+}
+
+/* Modal Styles */
+.modal {
+    display: flex; /* Use flex for centering */
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    opacity: 0; /* Start hidden */
+    visibility: hidden; /* Start hidden */
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out; /* Transition for fade */
+    justify-content: center; /* Center content horizontally */
+    align-items: center; /* Center content vertically */
+}
+
+.modal.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: auto; /* Center the modal */
+    padding: 25px;
+    border: none; /* Remove default border */
+    width: 80%; /* Could be more responsive */
+    max-width: 450px; /* Slightly wider modal */
+    border-radius: 16px; /* More rounded corners */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* Deeper, softer shadow */
+}
+
+.close-button {
+    color: #8e8e93; /* Light gray */
+    float: right;
+    font-size: 32px; /* Larger X */
+    font-weight: 300; /* Lighter weight */
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    cursor: pointer;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: #1c1c1e;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-content button {
+    margin: 8px; /* More margin */
+    padding: 12px 20px;
+    border: none;
+    border-radius: 10px; /* More rounded buttons */
+    cursor: pointer;
+    background-color: #007aff; /* Apple blue button */
+    color: white;
+    font-weight: 600; /* Semi-bold */
+    transition: background-color 0.2s ease-in-out, transform 0.1s ease-out, box-shadow 0.1s ease-out; /* Add transform and box-shadow transition */
+}
+
+.modal-content button:hover {
+    background-color: #005bb5;
+}
+
+.modal-content button:active {
+    transform: scale(0.98); /* Slightly shrink on click */
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15); /* Smaller shadow on click */
+}
+
+.modal-content input[type="text"] {
+    width: calc(100% - 20px);
+    padding: 12px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    border: 1px solid #d1d1d6; /* Softer border */
+    font-size: 1.1em;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.06); /* Subtle inner shadow */
+}
