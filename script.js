@@ -17,6 +17,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const storedStatus = localStorage.getItem(date.toISOString().slice(0, 10));
         statusInput.value = storedStatus || '';
         eventModal.classList.add('show');
+        // Prevent body scrolling on mobile when modal is open
+        document.body.style.overflow = 'hidden';
+        // Focus on input for better mobile UX
+        setTimeout(() => {
+            statusInput.focus();
+        }, 300);
     }
 
     // Function to hide the modal
@@ -24,6 +30,8 @@ document.addEventListener('DOMContentLoaded', function() {
         eventModal.classList.remove('show');
         statusInput.value = ''; // Clear input
         currentClickedDate = null;
+        // Re-enable body scrolling on mobile
+        document.body.style.overflow = '';
     }
 
     // Event listeners for modal buttons
@@ -181,6 +189,9 @@ document.addEventListener('DOMContentLoaded', function() {
         initialView: 'dayGridMonth',
         events: paydays,
         initialDate: new Date(),
+        height: 'auto', // Responsive height
+        contentHeight: 'auto',
+        aspectRatio: window.innerWidth < 768 ? 1.0 : 1.35, // Adjust aspect ratio for mobile
         eventContent: function(arg) {
             if (arg.event.title.startsWith('Payday for:')) {
                 return { html: arg.event.title };
@@ -201,6 +212,20 @@ document.addEventListener('DOMContentLoaded', function() {
                 updateDayCellStatus(info.el, storedStatus);
             }
 
+            // Enhanced mobile touch handling
+            let touchTimeout;
+            info.el.addEventListener('touchstart', function(e) {
+                e.preventDefault(); // Prevent default touch behavior
+                touchTimeout = setTimeout(() => {
+                    const clickedDate = info.date;
+                    showModal(clickedDate);
+                }, 100); // Small delay to prevent accidental taps
+            });
+            
+            info.el.addEventListener('touchend', function() {
+                clearTimeout(touchTimeout);
+            });
+            
             info.el.addEventListener('click', function() {
                 const clickedDate = info.date;
                 showModal(clickedDate);
@@ -209,6 +234,8 @@ document.addEventListener('DOMContentLoaded', function() {
         datesSet: function(info) {
         },
         windowResize: function(arg) {
+            // Adjust aspect ratio on resize
+            calendar.setOption('aspectRatio', window.innerWidth < 768 ? 1.0 : 1.35);
         }
     });
 
