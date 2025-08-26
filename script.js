@@ -248,43 +248,5 @@ document.addEventListener('DOMContentLoaded', function() {
 
     calendar.render();
 
-    // Dynamic Flying Objects
-    const numObjects = 20;
-    const shapes = ['circle', 'square', 'triangle']; // Simple shapes
-
-    for (let i = 0; i < numObjects; i++) {
-        const object = document.createElement('div');
-        object.classList.add('flying-object');
-
-        // Randomize size
-        const size = Math.random() * 30 + 20; // 20px to 50px
-        object.style.width = `${size}px`;
-        object.style.height = `${size}px`;
-
-        // Randomize shape
-        const shape = shapes[Math.floor(Math.random() * shapes.length)];
-        if (shape === 'circle') {
-            object.style.borderRadius = '50%';
-        } else if (shape === 'triangle') {
-            object.style.width = '0';
-            object.style.height = '0';
-            object.style.borderLeft = `${size / 2}px solid transparent`;
-            object.style.borderRight = `${size / 2}px solid transparent`;
-            object.style.borderBottom = `${size}px solid rgba(150, 150, 150, 0.3)`;
-            object.style.backgroundColor = 'transparent'; // Clear background for triangle
-        }
-
-        // Randomize animation properties
-        const duration = Math.random() * 15 + 10; // 10s to 25s
-        const delay = Math.random() * 10; // 0s to 10s
-        const startX = Math.random() * 100; // 0% to 100%
-        const startY = Math.random() * 100; // 0% to 100%
-
-        object.style.animationDuration = `${duration}s`;
-        object.style.animationDelay = `${delay}s`;
-        object.style.left = `${startX}vw`;
-        object.style.top = `${startY}vh`;
-
-        document.body.appendChild(object);
-    }
+    
 });
