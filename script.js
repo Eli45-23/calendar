@@ -47,6 +47,8 @@ document.addEventListener('DOMContentLoaded', function() {
             if (cellElement) {
                 updateDayCellStatus(cellElement, status);
             }
+            calendar.removeAllEvents();
+            calendar.addEventSource(calculateEvents());
             hideModal();
         }
     });
@@ -59,6 +61,8 @@ document.addEventListener('DOMContentLoaded', function() {
             if (cellElement) {
                 updateDayCellStatus(cellElement, null); // Pass null to clear status
             }
+            calendar.removeAllEvents();
+            calendar.addEventSource(calculateEvents());
             hideModal();
         }
     });
@@ -146,48 +150,51 @@ document.addEventListener('DOMContentLoaded', function() {
         return { regular, overtime };
     }
 
-    const paydays = [];
-    const payPeriods = getPayPeriods(new Date("2025-08-10"));
+    function calculateEvents() {
+        const paydays = [];
+        const payPeriods = getPayPeriods(new Date("2025-08-10"));
 
-    payPeriods.forEach(period => {
-        paydays.push({
-            start: period.start,
-            title: 'start pay period'
-        });
-        paydays.push({
-            start: period.end,
-            title: 'end pay period'
-        });
+        payPeriods.forEach(period => {
+            paydays.push({
+                start: period.start,
+                title: 'start pay period'
+            });
+            paydays.push({
+                start: period.end,
+                title: 'end pay period'
+            });
 
-        const payDate = new Date(period.end);
-        payDate.setDate(payDate.getDate() + 5);
+            const payDate = new Date(period.end);
+            payDate.setDate(payDate.getDate() + 5);
 
-        let totalRegularHours = 0;
-        let totalOvertimeHours = 0;
+            let totalRegularHours = 0;
+            let totalOvertimeHours = 0;
 
-        // Iterate through days in the pay period to calculate hours
-        let dayIterator = new Date(period.start);
-        while (dayIterator <= new Date(period.end)) {
-            const dateKey = dayIterator.toISOString().slice(0, 10);
-            const status = localStorage.getItem(dateKey);
-            if (status) {
-                const hours = parseHours(status);
-                totalRegularHours += hours.regular;
-                totalOvertimeHours += hours.overtime;
+            // Iterate through days in the pay period to calculate hours
+            let dayIterator = new Date(period.start);
+            while (dayIterator <= new Date(period.end)) {
+                const dateKey = dayIterator.toISOString().slice(0, 10);
+                const status = localStorage.getItem(dateKey);
+                if (status) {
+                    const hours = parseHours(status);
+                    totalRegularHours += hours.regular;
+                    totalOvertimeHours += hours.overtime;
+                }
+                dayIterator.setDate(dayIterator.getDate() + 1);
             }
-            dayIterator.setDate(dayIterator.getDate() + 1);
-        }
 
-        paydays.push({
-            start: payDate.toISOString().slice(0, 10),
-            title: `Payday for:<br>${period.start.slice(5).replace('-', '/')}-${period.end.slice(5).replace('-', '/')}<br>Reg: ${totalRegularHours} OT: ${totalOvertimeHours}`,
-            color: '#4caf50' // Use the same color as original paydays
+            paydays.push({
+                start: payDate.toISOString().slice(0, 10),
+                title: `Payday for:<br>${period.start.slice(5).replace('-', '/')}-${period.end.slice(5).replace('-', '/')}<br>Reg: ${totalRegularHours} OT: ${totalOvertimeHours}`,
+                color: '#4caf50' // Use the same color as original paydays
+            });
         });
-    });
+        return paydays;
+    }
 
     const calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
-        events: paydays,
+        events: calculateEvents(),
         initialDate: new Date(),
         height: 'auto', // Responsive height
         contentHeight: 'auto',
