@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', async function() {
+document.addEventListener('DOMContentLoaded', function() {
     const calendarEl = document.getElementById('calendar');
     const eventModal = document.getElementById('eventModal');
     const closeModalBtn = eventModal.querySelector('.close-button');
@@ -9,16 +9,6 @@ document.addEventListener('DOMContentLoaded', async function() {
     const cancelBtn = document.getElementById('cancelBtn');
 
     let currentClickedDate = null; // To store the date of the currently clicked cell
-    let statusMap = new Map(); // Global status map
-
-    // Fetch all statuses on initial load
-    try {
-        const response = await fetch('http://localhost:3000/api/statuses');
-        const { data: storedStatuses } = await response.json();
-        statusMap = new Map(storedStatuses.map(s => [s.date, s.status]));
-    } catch (error) {
-        console.error('Error fetching initial statuses:', error);
-    }
 
     // Function to show the modal
     function showModal(date) {
@@ -48,64 +38,32 @@ document.addEventListener('DOMContentLoaded', async function() {
     closeModalBtn.addEventListener('click', hideModal);
     cancelBtn.addEventListener('click', hideModal);
 
-    saveStatusBtn.addEventListener('click', async function() {
+    saveStatusBtn.addEventListener('click', function() {
         if (currentClickedDate) {
             const dateKey = currentClickedDate.toISOString().slice(0, 10);
             const status = statusInput.value;
-
-            try {
-                await fetch('http://localhost:3000/api/statuses', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ date: dateKey, status: status })
-                });
-
-                // Update statusMap and re-render calendar
-                const response = await fetch('http://localhost:3000/api/statuses');
-                const { data: storedStatuses } = await response.json();
-                statusMap = new Map(storedStatuses.map(s => [s.date, s.status]));
-
-                const cellElement = calendar.el.querySelector(`td[data-date="${dateKey}"]`);
-                if (cellElement) {
-                    updateDayCellStatus(cellElement, status);
-                }
-                calendar.removeAllEvents();
-                calendar.addEventSource(calculateEvents());
-                hideModal();
-            } catch (error) {
-                console.error('Error saving status:', error);
-                // Optionally, show an error message to the user
+            localStorage.setItem(dateKey, status);
+            const cellElement = calendar.el.querySelector(`td[data-date="${dateKey}"]`);
+            if (cellElement) {
+                updateDayCellStatus(cellElement, status);
             }
+            calendar.removeAllEvents();
+            calendar.addEventSource(calculateEvents());
+            hideModal();
         }
     });
 
-    deleteStatusBtn.addEventListener('click', async function() {
+    deleteStatusBtn.addEventListener('click', function() {
         if (currentClickedDate) {
             const dateKey = currentClickedDate.toISOString().slice(0, 10);
-
-            try {
-                await fetch(`http://localhost:3000/api/statuses/${dateKey}`, {
-                    method: 'DELETE'
-                });
-
-                // Update statusMap and re-render calendar
-                const response = await fetch('http://localhost:3000/api/statuses');
-                const { data: storedStatuses } = await response.json();
-                statusMap = new Map(storedStatuses.map(s => [s.date, s.status]));
-
-                const cellElement = calendar.el.querySelector(`td[data-date="${dateKey}"]`);
-                if (cellElement) {
-                    updateDayCellStatus(cellElement, null); // Pass null to clear status
-                }
-                calendar.removeAllEvents();
-                calendar.addEventSource(calculateEvents());
-                hideModal();
-            } catch (error) {
-                console.error('Error deleting status:', error);
-                // Optionally, show an error message to the user
+            localStorage.removeItem(dateKey);
+            const cellElement = calendar.el.querySelector(`td[data-date="${dateKey}"]`);
+            if (cellElement) {
+                updateDayCellStatus(cellElement, null); // Pass null to clear status
             }
+            calendar.removeAllEvents();
+            calendar.addEventSource(calculateEvents());
+            hideModal();
         }
     });
 
@@ -216,7 +174,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             let dayIterator = new Date(period.start);
             while (dayIterator <= new Date(period.end)) {
                 const dateKey = dayIterator.toISOString().slice(0, 10);
-                const status = statusMap.get(dateKey); // Changed to statusMap
+                const status = localStorage.getItem(dateKey);
                 if (status) {
                     const hours = parseHours(status);
                     totalRegularHours += hours.regular;
@@ -256,8 +214,8 @@ document.addEventListener('DOMContentLoaded', async function() {
                 info.el.classList.add('past-day');
             }
 
-            // Initialize status from statusMap
-            const storedStatus = statusMap.get(info.date.toISOString().slice(0, 10)); // <--- Changed to statusMap
+            // Initialize status from localStorage
+            const storedStatus = localStorage.getItem(info.date.toISOString().slice(0, 10));
             if (storedStatus) {
                 updateDayCellStatus(info.el, storedStatus);
             }
