@@ -386,7 +386,7 @@ body {
     }
 
     .fc-event {
-        padding: 6px 8px;
+        padding: 6px 4px; /* Reduced horizontal padding */
         margin-bottom: 3px;
         min-height: 28px;
     }
@@ -478,7 +478,7 @@ body {
     }
 
     .fc-event {
-        padding: 5px 6px;
+        padding: 5px 3px; /* Reduced horizontal padding */
         margin-bottom: 2px;
         border-radius: 4px;
         min-height: 26px;
