@@ -194,6 +194,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
+        dayMaxEvents: true, // automatically stack events and add a "+more" link
         events: calculateEvents(),
         initialDate: new Date(),
         height: 'auto', // Responsive height
