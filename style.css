@@ -60,24 +60,20 @@ body {
 
 .pay-label {
     position: absolute;
-    font-size: 11px; /* 11-12px text */
+    font-size: clamp(10px, 2.6vw, 12px); /* New clamp font size */
     font-weight: bold;
     background-color: rgba(54, 132, 207, 0.1); /* Lighter tint */
     border: 1px solid rgba(54, 132, 207, 0.2); /* Thin border */
     border-radius: 4px;
     padding: 2px 4px;
     white-space: nowrap;
+    overflow: hidden; /* Added for ellipsis */
+    text-overflow: ellipsis; /* Added for ellipsis */
     pointer-events: none;
     z-index: 2; /* Above background, below events */
 }
 
-.pay-bracket-start .pay-label-start {
-    left: 10px; /* A few pixels to the right of the bracket */
-}
-
-.pay-bracket-end .pay-label-end {
-    right: 10px; /* A few pixels to the left of the bracket */
-}
+/* These positioning rules are now handled by JavaScript */
 
 /* Custom styles for FullCalendar events to ensure text visibility */
 .fc-event-title {
