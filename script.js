@@ -128,86 +128,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    function drawPayPeriodBrackets() {
-        // Clear existing brackets/labels
-        document.querySelectorAll('.pay-bracket, .pay-label').forEach(el => el.remove());
-
-        const payPeriods = getPayPeriods(new Date("2025-08-10")); // Re-calculate or pass in
-
-        payPeriods.forEach(period => {
-            const startCell = calendar.el.querySelector(`td[data-date="${period.start}"]`);
-            const endCell = calendar.el.querySelector(`td[data-date="${period.end}"]`);
-
-            if (startCell) {
-                createBracketAndLabel(startCell, 'start', period.start);
-            }
-            if (endCell) {
-                createBracketAndLabel(endCell, 'end', period.end);
-            }
-        });
-    }
-
-    function createBracketAndLabel(cellElement, type, date) {
-        const cellRect = cellElement.getBoundingClientRect();
-        const calendarRect = calendar.el.getBoundingClientRect(); // Rect of the main calendar container
-
-        // Create bracket
-        const bracket = document.createElement('div');
-        bracket.classList.add('pay-bracket');
-        bracket.classList.add(`pay-bracket-${type}`);
-        bracket.style.position = 'absolute';
-        bracket.style.top = `${cellRect.top - calendarRect.top}px`;
-        bracket.style.height = `${cellRect.height}px`;
-        bracket.style.width = '8px'; // Fixed width for bracket
-
-        if (type === 'start') {
-            bracket.style.left = `${cellRect.left - calendarRect.left}px`;
-        } else { // type === 'end'
-            bracket.style.left = `${cellRect.right - calendarRect.left - 8}px`; // 8px is bracket width
-        }
-        bracket.style.pointerEvents = 'none'; // Ensure it doesn't block clicks
-        bracket.style.zIndex = '0'; // Below labels and events
-        calendar.el.appendChild(bracket);
-
-        // Create label
-        const label = document.createElement('div');
-        label.classList.add('pay-label');
-        label.classList.add(`pay-label-${type}`);
-        label.textContent = isMobileView() ? type : `${type} pay period`; // Shorten text
-        label.setAttribute('aria-label', `Pay period ${type}`);
-        label.style.position = 'absolute';
-        label.style.pointerEvents = 'none'; // Ensure it doesn't block clicks
-        label.style.zIndex = '2'; // Above brackets, below events
-
-        // Append to DOM temporarily to measure
-        calendar.el.appendChild(label);
-
-        const labelRect = label.getBoundingClientRect();
-
-        // Vertical centering
-        label.style.top = `${cellRect.top - calendarRect.top + (cellRect.height / 2) - (labelRect.height / 2)}px`;
-
-        // Horizontal positioning and clamping
-        const bracketWidth = 8;
-        const labelHorizontalPadding = 4; // From .pay-label padding: 2px 4px;
-
-        let desiredLeft;
-        if (type === 'start') {
-            desiredLeft = cellRect.left - calendarRect.left + bracketWidth + labelHorizontalPadding;
-        } else { // type === 'end'
-            desiredLeft = cellRect.right - calendarRect.left - bracketWidth - labelRect.width - labelHorizontalPadding;
-        }
-
-        // Clamping logic
-        const calendarWidth = calendarRect.width;
-        const calendarLeft = calendarRect.left;
-
-        let clampedLeft = Math.max(0, desiredLeft); // Clamp to left edge of calendar
-        clampedLeft = Math.min(clampedLeft, calendarWidth - labelRect.width); // Clamp to right edge of calendar
-
-        label.style.left = `${clampedLeft}px`;
-    }
-
     // Function to parse status text into hours
     function parseHours(statusString) {
         let regular = 0;
@@ -230,66 +150,48 @@ document.addEventListener('DOMContentLoaded', function() {
         return { regular, overtime };
     }
 
-    // Helper function to detect mobile view
-    function isMobileView() {
-        return window.innerWidth <= 430;
-    }
+    const paydays = [];
+    const payPeriods = getPayPeriods(new Date("2025-08-10"));
 
-    function calculateEvents() {
-        const paydays = [];
-        const payPeriods = getPayPeriods(new Date("2025-08-10"));
-
-        payPeriods.forEach(period => {
-            paydays.push({
-                start: period.start,
-                title: isMobileView() ? 'start' : 'start pay period', // Shorten for mobile
-                isPayPeriodLabel: true, // Custom property to identify
-                type: 'start-period'
-            });
-            paydays.push({
-                start: period.end,
-                title: isMobileView() ? 'end' : 'end pay period', // Shorten for mobile
-                isPayPeriodLabel: true, // Custom property
-                type: 'end-period'
-            });
-
-            const payDate = new Date(period.end);
-            payDate.setDate(payDate.getDate() + 5);
-
-            let totalRegularHours = 0;
-            let totalOvertimeHours = 0;
-
-            // Iterate through days in the pay period to calculate hours
-            let dayIterator = new Date(period.start);
-            while (dayIterator <= new Date(period.end)) {
-                const dateKey = dayIterator.toISOString().slice(0, 10);
-                const status = localStorage.getItem(dateKey);
-                if (status) {
-                    const hours = parseHours(status);
-                    totalRegularHours += hours.regular;
-                    totalOvertimeHours += hours.overtime;
-                }
-                dayIterator.setDate(dayIterator.getDate() + 1);
-            }
-
-            paydays.push({
-                start: payDate.toISOString().slice(0, 10),
-                title: `Payday for:<br>${period.start.slice(5).replace('-', '/')}-${period.end.slice(5).replace('-', '/')}<br>Reg: ${totalRegularHours} OT: ${totalOvertimeHours}`,
-                color: '#4caf50' // Use the same color as original paydays
-            });
+    payPeriods.forEach(period => {
+        paydays.push({
+            start: period.start,
+            title: 'start pay period'
         });
-        return paydays;
-    }
+        paydays.push({
+            start: period.end,
+            title: 'end pay period'
+        });
+
+        const payDate = new Date(period.end);
+        payDate.setDate(payDate.getDate() + 5);
+
+        let totalRegularHours = 0;
+        let totalOvertimeHours = 0;
+
+        // Iterate through days in the pay period to calculate hours
+        let dayIterator = new Date(period.start);
+        while (dayIterator <= new Date(period.end)) {
+            const dateKey = dayIterator.toISOString().slice(0, 10);
+            const status = localStorage.getItem(dateKey);
+            if (status) {
+                const hours = parseHours(status);
+                totalRegularHours += hours.regular;
+                totalOvertimeHours += hours.overtime;
+            }
+            dayIterator.setDate(dayIterator.getDate() + 1);
+        }
+
+        paydays.push({
+            start: payDate.toISOString().slice(0, 10),
+            title: `Payday for:<br>${period.start.slice(5).replace('-', '/')}-${period.end.slice(5).replace('-', '/')}<br>Reg: ${totalRegularHours} OT: ${totalOvertimeHours}`,
+            color: '#4caf50' // Use the same color as original paydays
+        });
+    });
 
     const calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
-        headerToolbar: { // Explicitly define toolbar
-            left: 'prev,next',
-            center: 'title',
-            right: ''
-        },
-        dayMaxEvents: true, // automatically stack events and add a "+more" link
-        events: calculateEvents(),
+        events: paydays,
         initialDate: new Date(),
         height: 'auto', // Responsive height
         contentHeight: 'auto',
@@ -334,17 +236,14 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         },
         datesSet: function(info) {
-            drawPayPeriodBrackets(); // Redraw on month navigation
         },
         windowResize: function(arg) {
             // Adjust aspect ratio on resize
             calendar.setOption('aspectRatio', window.innerWidth < 768 ? 1.0 : 1.35);
-            drawPayPeriodBrackets(); // Redraw on window resize
         }
     });
 
     calendar.render();
-    drawPayPeriodBrackets(); // Initial draw
 
     
 });

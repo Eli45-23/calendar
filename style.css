@@ -60,20 +60,24 @@ body {
 
 .pay-label {
     position: absolute;
-    font-size: clamp(10px, 2.6vw, 12px); /* New clamp font size */
+    font-size: 11px; /* 11-12px text */
     font-weight: bold;
     background-color: rgba(54, 132, 207, 0.1); /* Lighter tint */
     border: 1px solid rgba(54, 132, 207, 0.2); /* Thin border */
     border-radius: 4px;
     padding: 2px 4px;
     white-space: nowrap;
-    overflow: hidden; /* Added for ellipsis */
-    text-overflow: ellipsis; /* Added for ellipsis */
     pointer-events: none;
     z-index: 2; /* Above background, below events */
 }
 
-/* These positioning rules are now handled by JavaScript */
+.pay-bracket-start .pay-label-start {
+    left: 10px; /* A few pixels to the right of the bracket */
+}
+
+.pay-bracket-end .pay-label-end {
+    right: 10px; /* A few pixels to the left of the bracket */
+}
 
 /* Custom styles for FullCalendar events to ensure text visibility */
 .fc-event-title {
@@ -375,14 +379,14 @@ body {
     }
 
     .fc-event-title {
-        font-size: 0.6em;
+        font-size: 0.8em;
         line-height: 1.3;
         word-wrap: break-word;
         overflow-wrap: break-word;
     }
 
     .fc-event {
-        padding: 6px 4px; /* Reduced horizontal padding */
+        padding: 6px 8px;
         margin-bottom: 3px;
         min-height: 28px;
     }
@@ -465,7 +469,7 @@ body {
     }
 
     .fc-event-title {
-        font-size: 0.5em; /* Changed from 0.65em */
+        font-size: 0.7em; /* Changed from 0.65em */
         line-height: 1.2;
         font-weight: 600;
         word-wrap: break-word;
@@ -474,7 +478,7 @@ body {
     }
 
     .fc-event {
-        padding: 5px 3px; /* Reduced horizontal padding */
+        padding: 5px 6px;
         margin-bottom: 2px;
         border-radius: 4px;
         min-height: 26px;
