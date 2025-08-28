@@ -135,8 +135,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const payPeriods = getPayPeriods(new Date("2025-08-10")); // Re-calculate or pass in
 
         payPeriods.forEach(period => {
-            const startCell = calendar.getDateElement(period.start);
-            const endCell = calendar.getDateElement(period.end);
+            const startCell = calendar.el.querySelector(`td[data-date="${period.start}"]`);
+            const endCell = calendar.el.querySelector(`td[data-date="${period.end}"]`);
 
             if (startCell) {
                 createBracketAndLabel(startCell, 'start', period.start);
