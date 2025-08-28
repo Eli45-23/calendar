@@ -283,6 +283,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
+        headerToolbar: { // Explicitly define toolbar
+            left: 'prev,next',
+            center: 'title',
+            right: ''
+        },
         dayMaxEvents: true, // automatically stack events and add a "+more" link
         events: calculateEvents(),
         initialDate: new Date(),
