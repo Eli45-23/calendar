@@ -199,6 +199,19 @@ document.addEventListener('DOMContentLoaded', function() {
             if (cellDate < today) {
                 info.el.classList.add('past-date');
             }
+        },
+        viewDidMount: function(view) {
+            const headerEl = document.querySelector('.fc-header-toolbar');
+            if (headerEl) {
+                const marioContainer = document.createElement('div');
+                marioContainer.classList.add('mario-container');
+                marioContainer.innerHTML = `
+                    <div class="mario-runner">
+                        <div class="mario-sprite"></div>
+                    </div>
+                `;
+                headerEl.appendChild(marioContainer);
+            }
         }
     });
 
