@@ -221,7 +221,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const quoteText = document.getElementById('quote-text');
     const quoteAuthor = document.getElementById('quote-author');
 
-    fetch('https://zenquotes.io/api/today')
+    fetch('https://cors-anywhere.herokuapp.com/https://zenquotes.io/api/today')
         .then(response => response.json())
         .then(data => {
             const quote = data[0];
