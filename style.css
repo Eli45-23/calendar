@@ -1,551 +1,137 @@
+* { 
+    font-family: 'DM Sans', sans-serif !important; 
+}
+
+.mono { font-family: 'Space Mono', monospace !important; }
+
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background: linear-gradient(135deg, #c0c0c0, #e0e0e0, #c0c0c0); /* More contrasting gradient */
-    background-size: 600% 600%; /* Make gradient larger than viewport */
-    animation: backgroundFlow 10s ease infinite; /* Faster animation */
-    color: #1c1c1e; /* Dark gray, similar to iOS text */
-    -webkit-touch-callout: none; /* Disable callout on iOS */
-    -webkit-user-select: none; /* Disable text selection */
-    -webkit-tap-highlight-color: transparent; /* Remove tap highlight */
-    touch-action: manipulation; /* Improve touch response */
+    background: #ffffff;
 }
 
-@keyframes backgroundFlow {
-    0% {
-        background-position: 0% 50%;
-    }
-    50% {
-        background-position: 100% 50%;
-    }
-    100% {
-        background-position: 0% 50%;
-    }
+.calendar-container {
+    background: #ffffff;
+    border: 4px solid #000000;
+    box-shadow: 8px 8px 0px 0px #000000;
 }
 
-
-
-.container {
-    width: 80%;
-    max-width: 1100px;
-    position: relative;
-    background-color: #ffffff;
-    border-radius: 16px; /* More rounded corners */
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07), 
-                0 2px 4px rgba(0, 0, 0, 0.07), 
-                0 4px 8px rgba(0, 0, 0, 0.07), 
-                0 8px 16px rgba(0, 0, 0, 0.07), 
-                0 32px 64px rgba(0, 0, 0, 0.07); /* Multiple shadows for depth */
-    padding: 25px;
-    transform: translateY(-10px); /* Lift the calendar */
-    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+.calendar-header {
+    background: #6489ED;
+    border-bottom: 4px solid #000000;
 }
 
-.fc-view-harness {
-    position: relative;
-    z-index: 1;
+.nav-button {
+    background: #ffffff;
+    border: 3px solid #000000;
+    box-shadow: 4px 4px 0px 0px #000000;
+    transition: all 0.2s ease;
 }
 
-.pay-bracket {
-    position: absolute;
-    width: 8px; /* 8-12px wide */
-    background-color: rgba(54, 132, 207, 0.25);
-    border-radius: 4px; /* 4-8px rounded corners */
-    pointer-events: none;
-    z-index: 0; /* Behind day content */
+.nav-button:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px 0px #000000;
 }
 
-.pay-label {
-    position: absolute;
-    font-size: 11px; /* 11-12px text */
-    font-weight: bold;
-    background-color: rgba(54, 132, 207, 0.1); /* Lighter tint */
-    border: 1px solid rgba(54, 132, 207, 0.2); /* Thin border */
-    border-radius: 4px;
-    padding: 2px 4px;
-    white-space: nowrap;
-    pointer-events: none;
-    z-index: 2; /* Above background, below events */
+.nav-button:active {
+    transform: translate(0px, 0px);
+    box-shadow: 2px 2px 0px 0px #000000;
 }
 
-.pay-bracket-start .pay-label-start {
-    left: 10px; /* A few pixels to the right of the bracket */
+.today-button {
+    background: #FF6B9D;
+    border: 3px solid #000000;
+    box-shadow: 4px 4px 0px 0px #000000;
 }
 
-.pay-bracket-end .pay-label-end {
-    right: 10px; /* A few pixels to the left of the bracket */
+.today-button:hover {
+    background: #FF8FB3;
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px 0px #000000;
 }
 
-/* Custom styles for FullCalendar events to ensure text visibility */
-.fc-event-title {
-    white-space: normal !important; /* Allow text to wrap */
-    overflow: visible !important; /* Ensure overflow is visible */
-    font-weight: 500; /* Medium weight for event titles */
-    color: yellow !important;
-    word-wrap: break-word !important;
-    overflow-wrap: break-word !important;
-    hyphens: auto;
-    display: block;
-    width: 100%;
+.week-header {
+    background: #C7FFED;
+    border-bottom: 3px solid #000000;
 }
 
-.fc-event {
-    height: auto !important; /* Allow event height to adjust to content */
-    min-height: 22px; /* Ensure a minimum height for events */
-    border-radius: 6px; /* More rounded corners for events */
-    background-color: #007aff; /* Apple blue */
-    border: none; /* Remove default border */
-    padding: 4px 6px; /* More padding */
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Subtle shadow for events */
-    overflow: visible !important;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
+.week-day {
+    border-right: 2px solid #000000;
 }
 
-.fc-daygrid-event-harness {
-    margin-bottom: 3px; /* More spacing between events */
-    overflow: visible !important;
-    height: auto !important;
+.week-day:last-child {
+    border-right: none;
 }
 
-.fc-daygrid-event {
-    overflow: visible !important;
-    height: auto !important;
+.calendar-cell {
+    background: #ffffff;
+    border: 2px solid #000000;
+    border-left: none;
+    border-top: none;
+    min-height: 120px;
+    transition: all 0.2s ease;
 }
 
-/* Additional FullCalendar overrides for text visibility */
-.fc-daygrid-event .fc-event-main {
-    overflow: visible !important;
-    height: auto !important;
-}
-
-.fc-event-main-frame {
-    overflow: visible !important;
-    height: auto !important;
-}
-
-.fc-event-title-container {
-    overflow: visible !important;
-    height: auto !important;
-}
-
-/* Style for past days */
-.past-day {
-    background-color: #f9f9fb; /* Very light gray for past days */
-    color: #c7c7cc; /* Lighter gray for past text */
-    text-decoration: line-through;
-    text-decoration-color: #ff0000; /* Red */
-}
-
-/* Styles for worked/overtime/none days */
-.worked-day {
-    background-color: #34c759; /* Apple green */
-    color: white; /* White text for contrast */
-}
-
-.overtime-day {
-    background-color: #ff3b30; /* Apple red */
-    color: white; /* White text for contrast */
-}
-
-.none-day {
-    background-color: #f2f2f7; /* Match body background */
-    opacity: 0.8; /* Slightly faded */
-    color: #8e8e93; /* Light gray text */
-}
-
-.day-status {
-    font-size: 0.75em; /* Slightly larger font */
-    text-align: center;
-    color: #daa520; /* More readable yellow */
-    position: absolute; /* Position absolutely */
-    bottom: 5px; /* 5px from the bottom */
-    left: 50%; /* Center horizontally */
-    transform: translateX(-50%); /* Adjust for true true centering */
-    width: 100%; /* Take full width of parent */
-    display: flex; /* Use flexbox for internal alignment */
-    justify-content: center; /* Center content horizontally */
-    align-items: center; /* Center content vertically */
-    padding-right: 15px; /* Make space for the delete button */
-    font-weight: 500; /* Medium weight */
-}
-
-/* Make the day cell relative for absolute positioning of .day-status */
-.fc-daygrid-day {
+.calendar-cell:hover {
+    background: #F0F9FF;
+    transform: translate(-1px, -1px);
+    box-shadow: 2px 2px 0px 0px #000000;
+    z-index: 10;
     position: relative;
 }
 
-/* FullCalendar specific modernizations */
-.fc-toolbar-title {
-    font-size: 2em; /* Larger title */
-    font-weight: 700; /* Bold title */
-    color: #1c1c1e; /* Dark gray */
-    transition: transform 0.2s ease-in-out, color 0.2s ease-in-out; /* Add transition for hover */
+.calendar-row:first-child .calendar-cell {
+    border-top: 2px solid #000000;
 }
 
-.fc-toolbar-title:hover {
-    transform: translateY(-3px); /* Lift effect */
-    color: #007aff; /* Change color on hover */
+.calendar-cell:first-child {
+    border-left: 2px solid #000000;
 }
 
-.fc-button {
-    background-color: #007aff; /* Apple blue button */
-    border: none;
-    border-radius: 8px; /* More rounded buttons */
-    padding: 10px 18px;
-    font-weight: 600; /* Semi-bold */
-    color: white;
-    transition: background-color 0.2s ease-in-out, transform 0.1s ease-out, box-shadow 0.1s ease-out; /* Add transform and box-shadow transition */
+.date-number {
+    color: #000000;
+    font-weight: 700;
 }
 
-.fc-button:hover {
-    background-color: #005bb5;
+.other-month {
+    color: #6B7280;
 }
 
-.fc-button:active {
-    transform: scale(0.98); /* Slightly shrink on click */
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15); /* Smaller shadow on click */
+.work-entry {
+    border: 2px solid #000000;
+    border-radius: 0px;
+    padding: 4px 8px;
+    font-size: 11px;
+    font-weight: 500;
+    margin: 2px 0;
+    box-shadow: 2px 2px 0px 0px rgba(0, 0, 0, 0.3);
+    text-transform: uppercase;
 }
 
-.fc-col-header-cell-cushion {
-    color: #8e8e93; /* Light gray for header text */
-    font-weight: 600; /* Semi-bold */
-    padding-top: 10px; /* More padding */
-    padding-bottom: 10px;
+.entry-8hrs {
+    background: #22C55E;
+    color: #000000;
 }
 
-.fc-daygrid-day-number {
-    font-weight: 600; /* Semi-bold */
-    color: #1c1c1e; /* Dark gray */
-    padding: 8px; /* More padding */
+.entry-overtime {
+    background: #F59E0B;
+    color: #000000;
 }
 
-.fc-daygrid-day {
-    border-radius: 12px; /* More rounded corners for day cells */
-    overflow: hidden; /* Hide overflow for rounded corners */
-    background-color: #ffffff; /* White background for day cells */
-    border: 1px solid #e5e5ea; /* Subtle border */
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out, background-color 0.2s ease-in-out; /* Add transitions */
-    cursor: pointer; /* Show pointer cursor */
-    min-height: 60px; /* Ensure minimum tap target size */
+.entry-pay-period {
+    background: #3B82F6;
+    color: #FFFFFF;
 }
 
-.fc-daygrid-day:hover {
-    transform: translateY(-3px); /* Lift effect */
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12), 0 0 50px rgba(0, 255, 255, 0.8); /* Neon blue glow */
+.entry-payday {
+    background: #10B981;
+    color: #000000;
 }
 
-/* Touch-friendly tap effects for mobile */
-.fc-daygrid-day:active {
-    transform: scale(0.95); /* Subtle shrink on tap */
-    background-color: #f0f0f0; /* Light gray feedback */
+.entry-off {
+    background: #EF4444;
+    color: #FFFFFF;
 }
 
-/* Modal Styles */
-.modal {
-    display: flex; /* Use flex for centering */
-    position: fixed; /* Stay in place */
-    z-index: 1000; /* Sit on top */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-    opacity: 0; /* Start hidden */
-    visibility: hidden; /* Start hidden */
-    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out; /* Transition for fade */
-    justify-content: center; /* Center content horizontally */
-    align-items: center; /* Center content vertically */
-}
-
-.modal.show {
-    opacity: 1;
-    visibility: visible;
-}
-
-.modal-content {
-    background-color: #fefefe;
-    margin: auto; /* Center the modal */
-    padding: 25px;
-    border: none; /* Remove default border */
-    width: 80%; /* Could be more responsive */
-    max-width: 450px; /* Slightly wider modal */
-    border-radius: 16px; /* More rounded corners */
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* Deeper, softer shadow */
-}
-
-.close-button {
-    color: #8e8e93; /* Light gray */
-    float: right;
-    font-size: 32px; /* Larger X */
-    font-weight: 300; /* Lighter weight */
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    cursor: pointer;
-}
-
-.close-button:hover,
-.close-button:focus {
-    color: #1c1c1e;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-.modal-content button {
-    margin: 8px; /* More margin */
-    padding: 12px 20px;
-    border: none;
-    border-radius: 10px; /* More rounded buttons */
-    cursor: pointer;
-    background-color: #007aff; /* Apple blue button */
-    color: white;
-    font-weight: 600; /* Semi-bold */
-    transition: background-color 0.2s ease-in-out, transform 0.1s ease-out, box-shadow 0.1s ease-out; /* Add transform and box-shadow transition */
-}
-
-.modal-content button:hover {
-    background-color: #005bb5;
-}
-
-.modal-content button:active {
-    transform: scale(0.98); /* Slightly shrink on click */
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15); /* Smaller shadow on click */
-}
-
-.modal-content input[type="text"] {
-    width: calc(100% - 20px);
-    padding: 12px;
-    margin-bottom: 20px;
-    border-radius: 10px;
-    border: 1px solid #d1d1d6; /* Softer border */
-    font-size: 1.1em;
-    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.06); /* Subtle inner shadow */
-}
-
-@media (max-width: 768px) {
-    body {
-        padding: 10px; /* Add padding to prevent edge touching */
-    }
-
-    .container {
-        width: 100%;
-        max-width: none;
-        padding: 15px;
-        border-radius: 12px; /* Slightly less rounded on mobile */
-        margin: 0;
-    }
-
-    .fc-toolbar {
-        flex-direction: column;
-        gap: 10px;
-        text-align: center;
-    }
-
-    .fc-toolbar-chunk {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 8px;
-    }
-
-    .fc-toolbar-title {
-        font-size: 1.5em;
-        margin-bottom: 10px;
-        width: 100%;
-    }
-
-    .fc-button {
-        padding: 12px 16px; /* Larger tap targets */
-        font-size: 0.95em;
-        min-width: 44px; /* iOS minimum tap target */
-        min-height: 44px;
-    }
-
-    .fc-col-header-cell-cushion,
-    .fc-daygrid-day-number {
-        font-size: 0.9em;
-        padding: 8px;
-    }
-
-    .fc-daygrid-day {
-        min-height: 70px; /* Larger tap targets */
-        border-radius: 8px;
-    }
-
-    .fc-event-title {
-        font-size: 0.8em;
-        line-height: 1.3;
-        word-wrap: break-word;
-        overflow-wrap: break-word;
-    }
-
-    .fc-event {
-        padding: 6px 8px;
-        margin-bottom: 3px;
-        min-height: 28px;
-    }
-
-    .day-status {
-        font-size: 0.7em;
-        bottom: 3px;
-        padding-right: 5px;
-    }
-
-    .modal-content {
-        width: 90%;
-        max-width: 400px;
-        padding: 25px;
-        margin: 20px;
-    }
-
-    .modal-content button {
-        padding: 14px 20px; /* Larger tap targets */
-        font-size: 1em;
-        min-height: 44px;
-        margin: 5px;
-    }
-
-    .modal-content input[type="text"] {
-        padding: 14px;
-        font-size: 16px; /* Prevent zoom on iOS */
-        border-radius: 8px;
-    }
-
-    
-}
-
-@media (max-width: 480px) {
-    body {
-        padding: 5px;
-        min-height: 100vh;
-    }
-
-    .container {
-        width: 100%;
-        border-radius: 0;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        padding: 10px;
-        transform: none; /* Remove lift effect on small screens */
-    }
-
-    .fc-toolbar {
-        margin-bottom: 15px;
-    }
-
-    .fc-toolbar-title {
-        font-size: 1.3em;
-        margin-bottom: 8px;
-    }
-
-    .fc-button {
-        padding: 10px 14px;
-        font-size: 0.85em;
-        min-width: 44px;
-        min-height: 44px;
-        border-radius: 6px;
-    }
-
-    .fc-col-header-cell-cushion {
-        font-size: 0.75em;
-        padding: 6px 2px;
-        font-weight: 700;
-    }
-
-    .fc-daygrid-day-number {
-        font-size: 0.8em;
-        padding: 6px;
-        font-weight: 600;
-    }
-
-    .fc-daygrid-day {
-        min-height: 65px;
-        border-radius: 6px;
-    }
-
-    .fc-event-title {
-        font-size: 0.7em; /* Changed from 0.65em */
-        line-height: 1.2;
-        font-weight: 600;
-        word-wrap: break-word;
-        overflow-wrap: break-word;
-        hyphens: auto;
-    }
-
-    .fc-event {
-        padding: 5px 6px;
-        margin-bottom: 2px;
-        border-radius: 4px;
-        min-height: 26px;
-        max-width: 100%;
-    }
-
-    .day-status {
-        font-size: 0.6em;
-        bottom: 1px;
-        padding-right: 2px;
-        font-weight: 600;
-    }
-
-    .modal-content {
-        width: 95%;
-        max-width: none;
-        padding: 20px;
-        margin: 10px;
-        border-radius: 12px;
-    }
-
-    .modal-content h2 {
-        font-size: 1.3em;
-        margin-bottom: 15px;
-    }
-
-    .modal-content p {
-        font-size: 1em;
-        margin-bottom: 15px;
-    }
-
-    .modal-content button {
-        padding: 12px 16px;
-        font-size: 0.9em;
-        min-height: 44px;
-        margin: 3px;
-        border-radius: 8px;
-        width: calc(50% - 6px); /* Two buttons per row */
-        display: inline-block;
-    }
-    
-    /* Stack buttons vertically on very small screens */
-    #saveStatusBtn, #deleteStatusBtn {
-        width: calc(50% - 6px);
-    }
-    
-    #cancelBtn {
-        width: 100%;
-        margin-top: 10px;
-    }
-
-    .modal-content input[type="text"] {
-        padding: 12px;
-        font-size: 16px;
-        border-radius: 8px;
-        width: calc(100% - 24px);
-        margin-bottom: 20px;
-    }
-
-    .close-button {
-        font-size: 28px;
-        top: 8px;
-        right: 12px;
-        width: 32px;
-        height: 32px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
+.entry-canal {
+    background: #8B5CF6;
+    color: #FFFFFF;
 }
