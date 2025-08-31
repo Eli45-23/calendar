@@ -217,4 +217,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
     calendar.render();
     lucide.createIcons();
+
+    const quoteText = document.getElementById('quote-text');
+    const quoteAuthor = document.getElementById('quote-author');
+
+    fetch('https://zenquotes.io/api/today')
+        .then(response => response.json())
+        .then(data => {
+            const quote = data[0];
+            quoteText.innerText = `"${quote.q}"`;
+            quoteAuthor.innerText = `- ${quote.a}`;
+        })
+        .catch(error => {
+            console.error("Error fetching quote:", error);
+            quoteText.innerText = "Could not fetch a quote today. Sorry!";
+        });
 });
