@@ -168,6 +168,16 @@ document.addEventListener('DOMContentLoaded', function() {
             info.el.addEventListener('click', function() {
                 showModal(info.date);
             });
+            
+            // Mark past dates
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const cellDate = new Date(info.date);
+            cellDate.setHours(0, 0, 0, 0);
+            
+            if (cellDate < today) {
+                info.el.classList.add('past-date');
+            }
         }
     });
 

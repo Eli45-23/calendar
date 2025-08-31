@@ -303,6 +303,24 @@ body {
     color: #EF4444;
 }
 
+/* Past dates styling */
+.fc-daygrid-day.past-date .fc-daygrid-day-number {
+    position: relative;
+    color: #9CA3AF;
+}
+
+.fc-daygrid-day.past-date .fc-daygrid-day-number::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: #000000;
+    transform: translateY(-50%) rotate(-15deg);
+    border-radius: 2px;
+}
+
 /* Mobile Responsive */
 @media (max-width: 768px) {
     .max-w-6xl {
