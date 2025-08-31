@@ -1,5 +1,6 @@
-* { 
-    font-family: 'DM Sans', sans-serif !important; 
+/* Rewritten CSS for FullCalendar */
+* {
+    font-family: 'DM Sans', sans-serif !important;
 }
 
 .mono { font-family: 'Space Mono', monospace !important; }
@@ -8,60 +9,94 @@ body {
     background: #ffffff;
 }
 
-.calendar-container {
+/* .calendar-container -> .fc */
+.fc {
     background: #ffffff;
-    border: 4px solid #000000;
+    border: 4px solid #000000 !important;
     box-shadow: 8px 8px 0px 0px #000000;
 }
 
-.calendar-header {
+/* .calendar-header -> .fc-header-toolbar */
+.fc-header-toolbar {
     background: #6489ED;
     border-bottom: 4px solid #000000;
+    padding: 24px;
+    margin: 0 !important;
 }
 
-.nav-button {
-    background: #ffffff;
-    border: 3px solid #000000;
+.fc-toolbar-title {
+    font-family: 'Space Mono', monospace !important;
+    color: black;
+    font-size: 1.875rem !important;
+    font-weight: 700 !important;
+}
+
+/* .nav-button -> .fc-button */
+.fc-button {
+    background: #ffffff !important;
+    border: 3px solid #000000 !important;
     box-shadow: 4px 4px 0px 0px #000000;
     transition: all 0.2s ease;
+    border-radius: 0 !important;
+    margin: 0 5px !important;
+    padding: 12px !important;
 }
 
-.nav-button:hover {
+.fc-button .fc-icon {
+    color: #000000;
+}
+
+.fc-button:hover {
     transform: translate(-2px, -2px);
-    box-shadow: 6px 6px 0px 0px #000000;
+    box-shadow: 6px 6px 0px 0px #000000 !important;
 }
 
-.nav-button:active {
+.fc-button:active {
     transform: translate(0px, 0px);
-    box-shadow: 2px 2px 0px 0px #000000;
+    box-shadow: 2px 2px 0px 0px #000000 !important;
 }
 
-.today-button {
-    background: #FF6B9D;
-    border: 3px solid #000000;
+/* .today-button -> .fc-today-button */
+.fc-today-button {
+    background: #FF6B9D !important;
+    border: 3px solid #000000 !important;
     box-shadow: 4px 4px 0px 0px #000000;
+    font-family: 'Space Mono', monospace !important;
+    color: black !important;
+    font-weight: 700 !important;
+    padding: 8px 16px !important;
 }
 
-.today-button:hover {
-    background: #FF8FB3;
+.fc-today-button:hover {
+    background: #FF8FB3 !important;
     transform: translate(-2px, -2px);
-    box-shadow: 6px 6px 0px 0px #000000;
+    box-shadow: 6px 6px 0px 0px #000000 !important;
 }
 
-.week-header {
+/* .week-header -> .fc-col-header */
+.fc-col-header {
     background: #C7FFED;
     border-bottom: 3px solid #000000;
 }
 
-.week-day {
+/* .week-day -> .fc-col-header-cell */
+.fc-col-header-cell {
     border-right: 2px solid #000000;
 }
 
-.week-day:last-child {
+.fc-col-header-cell:last-child {
     border-right: none;
 }
 
-.calendar-cell {
+.fc-col-header-cell-cushion {
+    font-family: 'Space Mono', monospace !important;
+    color: black;
+    font-weight: 700;
+    padding: 16px;
+}
+
+/* .calendar-cell -> .fc-daygrid-day */
+.fc-daygrid-day {
     background: #ffffff;
     border: 2px solid #000000;
     border-left: none;
@@ -70,7 +105,7 @@ body {
     transition: all 0.2s ease;
 }
 
-.calendar-cell:hover {
+.fc-daygrid-day:hover {
     background: #F0F9FF;
     transform: translate(-1px, -1px);
     box-shadow: 2px 2px 0px 0px #000000;
@@ -78,23 +113,27 @@ body {
     position: relative;
 }
 
-.calendar-row:first-child .calendar-cell {
+.fc-daygrid-body .fc-row:first-child .fc-daygrid-day {
     border-top: 2px solid #000000;
 }
 
-.calendar-cell:first-child {
+.fc-daygrid-day:first-child {
     border-left: 2px solid #000000;
 }
 
-.date-number {
+/* .date-number -> .fc-daygrid-day-number */
+.fc-daygrid-day-number {
     color: #000000;
     font-weight: 700;
+    padding: 12px;
 }
 
-.other-month {
+/* .other-month -> .fc-day-other */
+.fc-day-other .fc-daygrid-day-number {
     color: #6B7280;
 }
 
+/* .work-entry -> custom class for events */
 .work-entry {
     border: 2px solid #000000;
     border-radius: 0px;
@@ -104,6 +143,7 @@ body {
     margin: 2px 0;
     box-shadow: 2px 2px 0px 0px rgba(0, 0, 0, 0.3);
     text-transform: uppercase;
+    color: black;
 }
 
 .entry-8hrs {
@@ -134,4 +174,21 @@ body {
 .entry-canal {
     background: #8B5CF6;
     color: #FFFFFF;
+}
+
+/* Some overrides for fullcalendar default styles */
+.fc-scrollgrid {
+    border: none !important;
+}
+
+.fc-theme-standard td, .fc-theme-standard th {
+    border: none !important;
+}
+
+.fc-daygrid-day-events {
+    padding: 0 4px;
+}
+
+.fc-event {
+    white-space: normal !important;
 }
