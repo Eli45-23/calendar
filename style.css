@@ -176,6 +176,11 @@ body {
     color: #FFFFFF;
 }
 
+.entry-holiday {
+    background: #FDBA74;
+    color: #000000;
+}
+
 /* Some overrides for fullcalendar default styles */
 .fc-scrollgrid {
     border: none !important;

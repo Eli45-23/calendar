@@ -107,6 +107,26 @@ document.addEventListener('DOMContentLoaded', function() {
         events: function(fetchInfo, successCallback, failureCallback) {
             const events = [];
             const payPeriods = getPayPeriods(new Date("2025-08-10"));
+            const holidays = [
+                { date: '2025-01-01', name: 'New Year\'s Day' },
+                { date: '2025-01-20', name: 'Martin Luther King, Jr. Day' },
+                { date: '2025-02-17', name: 'Presidents Day' },
+                { date: '2025-05-26', name: 'Memorial Day' },
+                { date: '2025-06-19', name: 'Juneteenth National Independence Day' },
+                { date: '2025-07-04', name: 'Independence Day' },
+                { date: '2025-09-01', name: 'Labor Day' },
+                { date: '2025-11-11', name: 'Veterans Day' },
+                { date: '2025-11-27', name: 'Thanksgiving Day' },
+                { date: '2025-12-25', name: 'Christmas Day' }
+            ];
+
+            holidays.forEach(holiday => {
+                events.push({
+                    start: holiday.date,
+                    title: holiday.name,
+                    classNames: ['work-entry', 'entry-holiday']
+                });
+            });
 
             payPeriods.forEach(period => {
                 events.push({
